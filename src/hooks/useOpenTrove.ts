@@ -10,6 +10,7 @@ import { borrowerOperationsAbi } from "../abis/borrowerOperations";
 import { troveManagerAbi } from "../abis/troveManager";
 import { hintHelpersAbi } from "../abis/hintHelpers";
 import { sortedTrovesAbi } from "../abis/sortedTroves";
+import { toErrorMessage } from "../lib/errors";
 
 const MAX_FEE_PERCENTAGE = 5000000000000000n;
 const RANDOM_SEED = 42n;
@@ -19,14 +20,6 @@ export interface UseOpenTroveResult {
   isPending: boolean;
   isConfirmed: boolean;
   error: string | null;
-}
-
-function toErrorMessage(err: unknown): string {
-  if (err instanceof Error) {
-    const msg = err.message;
-    return msg.length > 300 ? `${msg.slice(0, 300)}…` : msg;
-  }
-  return "Transaction failed";
 }
 
 export function useOpenTrove(): UseOpenTroveResult {

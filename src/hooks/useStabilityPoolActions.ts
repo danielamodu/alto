@@ -10,6 +10,7 @@ import type { Address } from "viem";
 import { CONTRACTS } from "../config/contracts";
 import { erc20Abi } from "../abis/erc20";
 import { stabilityPoolAbi } from "../abis/stabilityPool";
+import { toErrorMessage } from "../lib/errors";
 
 export type DepositStep = "approve" | "deposit" | null;
 
@@ -21,14 +22,6 @@ export interface UseStabilityPoolActionsResult {
   depositError: string | null;
   withdrawError: string | null;
   depositStep: DepositStep;
-}
-
-function toErrorMessage(err: unknown): string {
-  if (err instanceof Error) {
-    const msg = err.message;
-    return msg.length > 300 ? `${msg.slice(0, 300)}…` : msg;
-  }
-  return "Transaction failed";
 }
 
 export function useStabilityPoolActions(): UseStabilityPoolActionsResult {

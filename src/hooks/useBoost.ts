@@ -13,6 +13,7 @@ import { stabilityPoolAbi } from "../abis/stabilityPool";
 import { useTrove } from "./useTrove";
 import { useStabilityPool } from "./useStabilityPool";
 import { computeInsertHints } from "../lib/hints";
+import { toErrorMessage } from "../lib/errors";
 
 export type BoostStep = "idle" | "borrowing" | "depositing" | "done";
 
@@ -37,14 +38,6 @@ export interface UseBoostResult {
 
 /// @notice Collateral ratio floor for the safety check (protocol MCR is 110%).
 const SAFE_RATIO_PERCENT = 150;
-
-function toErrorMessage(err: unknown): string {
-  if (err instanceof Error) {
-    const msg = err.message;
-    return msg.length > 300 ? `${msg.slice(0, 300)}…` : msg;
-  }
-  return "Boost failed";
-}
 
 export function useBoost(): UseBoostResult {
   const { address } = useAccount();
