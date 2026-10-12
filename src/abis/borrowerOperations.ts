@@ -23,7 +23,6 @@ export const borrowerOperationsAbi = [
     name: "adjustTrove",
     stateMutability: "payable",
     inputs: [
-      { name: "_maxFeePercentage", type: "uint256" },
       { name: "_collWithdrawal", type: "uint256" },
       { name: "_MUSDChange", type: "uint256" },
       { name: "_isDebtIncrease", type: "bool" },
