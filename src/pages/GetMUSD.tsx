@@ -27,9 +27,24 @@ export default function GetMUSD(): React.JSX.Element {
   } = useTrove();
   const { openTrove, isPending, isConfirmed, error } = useOpenTrove();
 
-  const [btcInput, setBtcInput] = useState("0.01");
+  const [btcInput, setBtcInput] = useState("0.1");
   const [musdInput, setMusdInput] = useState("2000");
   const [formError, setFormError] = useState<string | null>(null);
+
+  function estimateRatioPercent(): number | null {
+    try {
+      const btcWei = parseUnits(btcInput.trim(), 18);
+      const musdWei = parseUnits(musdInput.trim(), 18);
+      if (btcWei <= 0n || musdWei <= 0n || btcPrice <= 0n) return null;
+      const ratio =
+        (btcWei * btcPrice * 100n) / (1000000000000000000n * musdWei);
+      return Number(ratio);
+    } catch {
+      return null;
+    }
+  }
+
+  const estRatio = estimateRatioPercent();
 
   if (!isConnected) {
     return (
@@ -127,7 +142,7 @@ export default function GetMUSD(): React.JSX.Element {
               <input
                 className="input"
                 inputMode="decimal"
-                placeholder="0.01"
+                placeholder="0.1"
                 value={btcInput}
                 onChange={(e) => setBtcInput(e.target.value)}
               />
@@ -144,8 +159,19 @@ export default function GetMUSD(): React.JSX.Element {
             </label>
             <p className="muted">
               0.5% max fee + MUSD gas compensation applies. Hints are computed
-              on-chain for you.
+              on-chain for you. Minimum debt 2,000 MUSD, minimum 110%
+              collateral ratio.
             </p>
+            {estRatio != null ? (
+              estRatio < 150 ? (
+                <p className="error">
+                  Est. collateral ratio {estRatio}% — too low, this transaction
+                  will fail. Add BTC or lower MUSD.
+                </p>
+              ) : (
+                <p className="success">Est. collateral ratio {estRatio}%</p>
+              )
+            ) : null}
             {formError ? <p className="error">{formError}</p> : null}
             {error ? <p className="error">{error}</p> : null}
             {isConfirmed ? (
