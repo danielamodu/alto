@@ -17,7 +17,11 @@ export default function Landing(): React.JSX.Element {
     <main className="page">
       <div className="container hero">
         <p className="eyebrow">Alto on Mezo Testnet</p>
-        <h1>Your Bitcoin, finally working.</h1>
+        <h1>
+          Your Bitcoin,
+          <br />
+          finally working.
+        </h1>
         <p className="subtext">
           Earn yield, borrow, and boost your MUSD — no DeFi knowledge needed.
         </p>
@@ -28,6 +32,32 @@ export default function Landing(): React.JSX.Element {
         </div>
         <div className="connect-wrap">
           <ConnectButton />
+        </div>
+        <div className="how-it-works">
+          <p className="label">How it works</p>
+          <div className="how-grid">
+            <div className="how-step">
+              <span className="step-num">1</span>
+              <h3>Deposit BTC</h3>
+              <p className="muted">
+                Lock your Bitcoin as collateral and mint MUSD
+              </p>
+            </div>
+            <div className="how-step">
+              <span className="step-num">2</span>
+              <h3>Earn yield</h3>
+              <p className="muted">
+                Put your MUSD in the pool and start earning
+              </p>
+            </div>
+            <div className="how-step">
+              <span className="step-num">3</span>
+              <h3>Boost returns</h3>
+              <p className="muted">
+                Multiply your yield up to 5x with one click
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </main>

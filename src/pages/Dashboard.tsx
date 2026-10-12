@@ -13,10 +13,14 @@ function truncateAddress(address: string): string {
 export default function Dashboard(): React.JSX.Element {
   const { address, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
-  const { btcBalance, musdBalance, isLoading, isError } = useBalances();
+  const { btcBalance, musdBalance, musdBalanceRaw, isLoading, isError } =
+    useBalances();
   const { spDeposit, isLoading: spLoading } = useStabilityPool();
-  const { hasActiveTrove } = useTrove();
+  const { hasActiveTrove, isLoading: troveLoading } = useTrove();
   const boostReady = hasActiveTrove && spDeposit > 0n;
+  const loaded = !isLoading && !spLoading && !troveLoading;
+  const isNewUser =
+    loaded && !hasActiveTrove && spDeposit === 0n && musdBalanceRaw === 0n;
 
   if (!isConnected || !address) {
     return (
@@ -74,14 +78,25 @@ export default function Dashboard(): React.JSX.Element {
           </div>
         </section>
 
-        <section className="action-grid">
+        {isNewUser ? (
           <div className="card">
-            <h3>Get MUSD</h3>
-            <p className="muted">Deposit BTC, mint MUSD.</p>
+            <h3>Start here</h3>
+            <p className="muted">
+              Deposit BTC to mint MUSD, then put it to work.
+            </p>
             <Link className="btn" to="/get-musd">
-              Open
+              Get MUSD →
             </Link>
           </div>
+        ) : (
+          <section className="action-grid">
+            <div className="card">
+              <h3>Get MUSD</h3>
+              <p className="muted">Deposit BTC, mint MUSD.</p>
+              <Link className="btn" to="/get-musd">
+                Open
+              </Link>
+            </div>
           <div className="card">
             <h3>
               Earn{" "}
@@ -121,6 +136,7 @@ export default function Dashboard(): React.JSX.Element {
             )}
           </div>
         </section>
+        )}
       </div>
     </main>
   );
