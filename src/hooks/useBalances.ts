@@ -17,6 +17,7 @@ const MUSD_DECIMALS = 18;
 interface UseBalancesResult {
   btcBalance: string;
   musdBalance: string;
+  musdBalanceRaw: bigint;
   isLoading: boolean;
   isError: boolean;
   btcError: Error | null;
@@ -66,6 +67,7 @@ export function useBalances(): UseBalancesResult {
   return {
     btcBalance,
     musdBalance,
+    musdBalanceRaw: typeof musdRaw === "bigint" ? musdRaw : 0n,
     isLoading: btcLoading || musdLoading,
     isError: btcIsError || musdIsError,
     btcError: btcQueryError instanceof Error ? btcQueryError : null,

@@ -1,9 +1,11 @@
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAccount, useBalance } from "wagmi";
 import { formatUnits, parseUnits } from "viem";
 import { useTrove } from "../hooks/useTrove";
 import { useOpenTrove } from "../hooks/useOpenTrove";
+import { useCloseTrove } from "../hooks/useCloseTrove";
+import { useBalances } from "../hooks/useBalances";
 
 const TROVE_STATUS_LABELS: Record<number, string> = {
   0: "No trove",
@@ -12,6 +14,75 @@ const TROVE_STATUS_LABELS: Record<number, string> = {
   3: "Closed by liquidation",
   4: "Closed by redemption",
 };
+
+function ClosePositionSection(): React.JSX.Element {
+  const navigate = useNavigate();
+  const { troveDebt, troveColl } = useTrove();
+  const { musdBalanceRaw } = useBalances();
+  const { closePosition, isPending, error } = useCloseTrove();
+  const [closed, setClosed] = useState(false);
+  const timer = useRef<number | null>(null);
+
+  useEffect(
+    () => () => {
+      if (timer.current != null) window.clearTimeout(timer.current);
+    },
+    [],
+  );
+
+  const shortfall =
+    troveDebt > musdBalanceRaw ? troveDebt - musdBalanceRaw : 0n;
+
+  async function handleClose(): Promise<void> {
+    try {
+      await closePosition();
+      setClosed(true);
+      timer.current = window.setTimeout(() => {
+        void navigate("/dashboard");
+      }, 2000);
+    } catch {
+      setClosed(false);
+    }
+  }
+
+  return (
+    <div className="card form">
+      <h3>Close your position</h3>
+      <p className="muted">
+        Repay your MUSD debt and recover your BTC collateral.
+      </p>
+      <p className="muted">
+        Debt: {Number(formatUnits(troveDebt, 18)).toFixed(2)} MUSD ·
+        Collateral: {Number(formatUnits(troveColl, 18)).toFixed(4)} BTC ·
+        Your MUSD: {Number(formatUnits(musdBalanceRaw, 18)).toFixed(2)} MUSD
+      </p>
+      {shortfall > 0n ? (
+        <>
+          <p className="error">
+            You need {Number(formatUnits(shortfall, 18)).toFixed(2)} more MUSD
+            to close. Withdraw from Earn first.
+          </p>
+          <Link className="btn btn-secondary" to="/earn">
+            Go to Earn →
+          </Link>
+        </>
+      ) : null}
+      {error ? <p className="error">{error}</p> : null}
+      {closed ? (
+        <p className="success">Position closed. Your BTC has been returned.</p>
+      ) : (
+        <button
+          type="button"
+          className="btn"
+          disabled={shortfall > 0n || isPending}
+          onClick={() => void handleClose()}
+        >
+          {isPending ? "Closing…" : "Close Position & Recover BTC"}
+        </button>
+      )}
+    </div>
+  );
+}
 
 export default function GetMUSD(): React.JSX.Element {
   const { isConnected, address } = useAccount();
@@ -210,6 +281,7 @@ export default function GetMUSD(): React.JSX.Element {
             </button>
           </form>
         )}
+        {hasActiveTrove ? <ClosePositionSection /> : null}
       </div>
     </main>
   );
