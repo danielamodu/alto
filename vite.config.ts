@@ -7,4 +7,7 @@ export default defineConfig({
   server: {
     allowedHosts: true,
   },
+  define: {
+    global: 'globalThis',
+  },
 })
