@@ -173,6 +173,44 @@ h3 {
   border: 1px solid var(--border);
 }
 
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 16px;
+  padding: 12px 14px;
+  width: 100%;
+}
+
+.input:focus {
+  outline: 1px solid var(--gold);
+  border-color: var(--gold);
+}
+
+.success {
+  color: var(--gold);
+  margin: 8px 0 0;
+  font-size: 15px;
+}
+
+.card .btn {
+  margin-top: 8px;
+}
+
 @media (max-width: 560px) {
   h1 {
     font-size: 32px;

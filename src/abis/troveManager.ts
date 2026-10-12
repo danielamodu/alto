@@ -1,0 +1,68 @@
+export const troveManagerAbi = [
+  {
+    type: "function",
+    name: "MUSD_GAS_COMPENSATION",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ name: "", type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "MCR",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ name: "", type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "getCurrentICR",
+    stateMutability: "view",
+    inputs: [
+      { name: "_borrower", type: "address" },
+      { name: "_price", type: "uint256" },
+    ],
+    outputs: [{ name: "", type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "getTroveStatus",
+    stateMutability: "view",
+    inputs: [{ name: "_borrower", type: "address" }],
+    outputs: [{ name: "", type: "uint8" }],
+  },
+  {
+    type: "function",
+    name: "getTroveColl",
+    stateMutability: "view",
+    inputs: [{ name: "_borrower", type: "address" }],
+    outputs: [{ name: "", type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "getTroveDebt",
+    stateMutability: "view",
+    inputs: [{ name: "_borrower", type: "address" }],
+    outputs: [{ name: "", type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "getTroveOwnersCount",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ name: "", type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "getNominalICR",
+    stateMutability: "view",
+    inputs: [{ name: "_borrower", type: "address" }],
+    outputs: [{ name: "", type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "getTroveFromTroveOwnersArray",
+    stateMutability: "view",
+    inputs: [{ name: "_index", type: "uint256" }],
+    outputs: [{ name: "", type: "address" }],
+  },
+] as const;

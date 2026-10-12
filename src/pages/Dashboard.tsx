@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useAccount, useDisconnect } from "wagmi";
 import { useBalances } from "../hooks/useBalances";
 
@@ -70,7 +71,10 @@ export default function Dashboard(): React.JSX.Element {
         <section className="action-grid">
           <div className="card">
             <h3>Get MUSD</h3>
-            <p className="muted">Coming soon</p>
+            <p className="muted">Deposit BTC, mint MUSD.</p>
+            <Link className="btn" to="/get-musd">
+              Open
+            </Link>
           </div>
           <div className="card">
             <h3>Earn</h3>
