@@ -3,6 +3,7 @@ import { useAccount, useDisconnect } from "wagmi";
 import { formatUnits } from "viem";
 import { useBalances } from "../hooks/useBalances";
 import { useStabilityPool } from "../hooks/useStabilityPool";
+import { useTrove } from "../hooks/useTrove";
 
 function truncateAddress(address: string): string {
   if (address.length < 10) return address;
@@ -14,6 +15,8 @@ export default function Dashboard(): React.JSX.Element {
   const { disconnect } = useDisconnect();
   const { btcBalance, musdBalance, isLoading, isError } = useBalances();
   const { spDeposit, isLoading: spLoading } = useStabilityPool();
+  const { hasActiveTrove } = useTrove();
+  const boostReady = hasActiveTrove && spDeposit > 0n;
 
   if (!isConnected || !address) {
     return (
@@ -106,7 +109,16 @@ export default function Dashboard(): React.JSX.Element {
           </div>
           <div className="card">
             <h3>Boost</h3>
-            <p className="muted">Coming soon</p>
+            {boostReady ? (
+              <>
+                <p className="muted">Ready to boost — up to 5x.</p>
+                <Link className="btn" to="/boost">
+                  Boost
+                </Link>
+              </>
+            ) : (
+              <p className="muted boost-greyed">Boost coming after you earn</p>
+            )}
           </div>
         </section>
       </div>

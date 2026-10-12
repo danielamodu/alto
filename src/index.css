@@ -283,6 +283,54 @@ h3 {
   margin-top: 16px;
 }
 
+.notice {
+  background: var(--surface);
+  border: 1px solid var(--gold);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  font-size: 15px;
+  margin: 16px 0 0;
+}
+
+.slider {
+  width: 100%;
+  accent-color: var(--gold);
+}
+
+.card-flat {
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card-flat .muted,
+.card-flat .error {
+  margin: 0;
+}
+
+.safety-bar {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.safety-fill-safe {
+  height: 100%;
+  background: var(--gold);
+}
+
+.safety-fill-risk {
+  height: 100%;
+  background: #f27a7a;
+}
+
+.boost-greyed {
+  opacity: 0.55;
+}
+
 @media (max-width: 560px) {
   h1 {
     font-size: 32px;

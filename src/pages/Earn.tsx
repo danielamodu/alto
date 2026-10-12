@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAccount, useReadContract } from "wagmi";
 import { formatUnits, parseUnits, type Address } from "viem";
 import { CONTRACTS } from "../config/contracts";
@@ -19,6 +19,9 @@ function parseInput(input: string): bigint | null {
 
 export default function Earn(): React.JSX.Element {
   const { address, isConnected } = useAccount();
+  const location = useLocation();
+  const notice =
+    (location.state as { notice?: string } | null)?.notice ?? null;
   const { spDeposit, btcGain, isLoading, refetch } = useStabilityPool();
   const {
     depositToSP,
@@ -115,6 +118,7 @@ export default function Earn(): React.JSX.Element {
         </Link>
         <p className="eyebrow">Earn</p>
         <h2>Deposit MUSD to earn yield from liquidations</h2>
+        {notice ? <p className="notice">{notice}</p> : null}
 
         <section className="action-grid stats-row">
           <div className="card">

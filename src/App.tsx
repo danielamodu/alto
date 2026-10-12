@@ -3,6 +3,7 @@ import Landing from "./pages/Landing";
 import Dashboard from "./pages/Dashboard";
 import GetMUSD from "./pages/GetMUSD";
 import Earn from "./pages/Earn";
+import Boost from "./pages/Boost";
 
 export default function App(): React.JSX.Element {
   return (
@@ -12,6 +13,7 @@ export default function App(): React.JSX.Element {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/get-musd" element={<GetMUSD />} />
         <Route path="/earn" element={<Earn />} />
+        <Route path="/boost" element={<Boost />} />
       </Routes>
     </BrowserRouter>
   );

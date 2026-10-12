@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAccount, useBalance } from "wagmi";
 import { formatUnits, parseUnits } from "viem";
 import { useTrove } from "../hooks/useTrove";
@@ -15,6 +15,9 @@ const TROVE_STATUS_LABELS: Record<number, string> = {
 
 export default function GetMUSD(): React.JSX.Element {
   const { isConnected, address } = useAccount();
+  const location = useLocation();
+  const notice =
+    (location.state as { notice?: string } | null)?.notice ?? null;
   const {
     troveStatus,
     troveColl,
@@ -109,11 +112,11 @@ export default function GetMUSD(): React.JSX.Element {
           <div>
             <p className="eyebrow">Get MUSD</p>
             <h2>Deposit BTC, mint MUSD</h2>
-          </div>
-          <Link className="btn btn-secondary" to="/dashboard">
+          </div>          <Link className="btn btn-secondary" to="/dashboard">
             Dashboard
           </Link>
         </header>
+        {notice ? <p className="notice">{notice}</p> : null}
 
         <section className="balance-grid">
           <div className="card">
