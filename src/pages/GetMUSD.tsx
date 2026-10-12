@@ -28,7 +28,7 @@ export default function GetMUSD(): React.JSX.Element {
   const { openTrove, isPending, isConfirmed, error } = useOpenTrove();
 
   const [btcInput, setBtcInput] = useState("0.01");
-  const [musdInput, setMusdInput] = useState("100");
+  const [musdInput, setMusdInput] = useState("2000");
   const [formError, setFormError] = useState<string | null>(null);
 
   if (!isConnected) {
