@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useAccount } from "wagmi";
+import { useAccount, useBalance } from "wagmi";
 import { formatUnits, parseUnits } from "viem";
 import { useTrove } from "../hooks/useTrove";
 import { useOpenTrove } from "../hooks/useOpenTrove";
@@ -14,7 +14,7 @@ const TROVE_STATUS_LABELS: Record<number, string> = {
 };
 
 export default function GetMUSD(): React.JSX.Element {
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
   const {
     troveStatus,
     troveColl,
@@ -26,6 +26,7 @@ export default function GetMUSD(): React.JSX.Element {
     btcPrice,
   } = useTrove();
   const { openTrove, isPending, isConfirmed, error } = useOpenTrove();
+  const { data: nativeBalance } = useBalance({ address });
 
   const [btcInput, setBtcInput] = useState("0.049");
   const [musdInput, setMusdInput] = useState("2000");
@@ -45,6 +46,19 @@ export default function GetMUSD(): React.JSX.Element {
   }
 
   const estRatio = estimateRatioPercent();
+  const walletBtc = nativeBalance?.value ?? 0n;
+
+  function estimateCollateralWei(): bigint | null {
+    try {
+      return parseUnits(btcInput.trim(), 18);
+    } catch {
+      return null;
+    }
+  }
+
+  const collateralWei = estimateCollateralWei();
+  const exceedsBalance =
+    collateralWei != null && nativeBalance != null && collateralWei > walletBtc;
 
   if (!isConnected) {
     return (
@@ -172,6 +186,13 @@ export default function GetMUSD(): React.JSX.Element {
                 <p className="success">Est. collateral ratio {estRatio}%</p>
               )
             ) : null}
+            {exceedsBalance ? (
+              <p className="error">
+                Insufficient BTC — your wallet has{" "}
+                {Number(formatUnits(walletBtc, 18)).toFixed(4)} BTC. Lower the
+                collateral (and keep a little for gas).
+              </p>
+            ) : null}
             {formError ? <p className="error">{formError}</p> : null}
             {error ? <p className="error">{error}</p> : null}
             {isConfirmed ? (
@@ -180,7 +201,7 @@ export default function GetMUSD(): React.JSX.Element {
             <button
               type="submit"
               className="btn"
-              disabled={isPending || troveLoading}
+              disabled={isPending || troveLoading || exceedsBalance}
             >
               {isPending ? "Confirm in wallet…" : "Open trove"}
             </button>
