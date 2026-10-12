@@ -14,6 +14,7 @@ export interface UseTroveResult {
   isError: boolean;
   btcPrice: bigint;
   btcPriceLoading: boolean;
+  refetch: () => void;
 }
 
 function toStatusNumber(value: unknown): number {
@@ -47,6 +48,7 @@ export function useTrove(): UseTroveResult {
     data: statusRaw,
     isLoading: statusLoading,
     isError: statusError,
+    refetch: refetchStatus,
   } = useReadContract({
     address: CONTRACTS.TROVE_MANAGER,
     abi: troveManagerAbi,
@@ -59,6 +61,7 @@ export function useTrove(): UseTroveResult {
     data: collRaw,
     isLoading: collLoading,
     isError: collError,
+    refetch: refetchColl,
   } = useReadContract({
     address: CONTRACTS.TROVE_MANAGER,
     abi: troveManagerAbi,
@@ -71,6 +74,7 @@ export function useTrove(): UseTroveResult {
     data: debtRaw,
     isLoading: debtLoading,
     isError: debtError,
+    refetch: refetchDebt,
   } = useReadContract({
     address: CONTRACTS.TROVE_MANAGER,
     abi: troveManagerAbi,
@@ -85,6 +89,7 @@ export function useTrove(): UseTroveResult {
     data: icrRaw,
     isLoading: icrLoading,
     isError: icrError,
+    refetch: refetchIcr,
   } = useReadContract({
     address: CONTRACTS.TROVE_MANAGER,
     abi: troveManagerAbi,
@@ -94,6 +99,13 @@ export function useTrove(): UseTroveResult {
   });
 
   const troveStatus = toStatusNumber(statusRaw);
+
+  function refetch(): void {
+    void refetchStatus();
+    void refetchColl();
+    void refetchDebt();
+    void refetchIcr();
+  }
 
   return {
     troveStatus,
@@ -107,5 +119,6 @@ export function useTrove(): UseTroveResult {
       priceError || statusError || collError || debtError || icrError,
     btcPrice,
     btcPriceLoading: priceLoading,
+    refetch,
   };
 }

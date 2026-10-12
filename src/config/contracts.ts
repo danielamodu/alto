@@ -6,4 +6,7 @@ export const CONTRACTS = {
   SORTED_TROVES: "0x722E4D24FD6Ff8b0AC679450F3D91294607268fA",
   PRICE_FEED: "0x86bCF0841622a5dAC14A313a15f96A95421b9366",
   STABILITY_POOL: "0x1CCA7E410eE41739792eA0A24e00349Dd247680e",
+  // Proxy-based looping router (proxy-owned troves). EOA-trove flows
+  // (Get MUSD / Boost) call BorrowerOperations directly, not via this.
+  ALTO_ROUTER: "0x9ac86cdb45184BF92BB1Aec9C6CEaDBAa12468C6",
 } as const;
