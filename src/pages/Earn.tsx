@@ -117,7 +117,7 @@ export default function Earn(): React.JSX.Element {
           ← Dashboard
         </Link>
         <p className="eyebrow">Earn</p>
-        <h2>Deposit MUSD to earn yield from liquidations</h2>
+        <h2>Earn BTC every time someone gets liquidated</h2>
         {notice ? <p className="notice">{notice}</p> : null}
 
         <section className="action-grid stats-row">

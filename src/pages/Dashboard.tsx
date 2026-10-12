@@ -15,7 +15,7 @@ export default function Dashboard(): React.JSX.Element {
   const { disconnect } = useDisconnect();
   const { btcBalance, musdBalance, musdBalanceRaw, isLoading, isError } =
     useBalances();
-  const { spDeposit, isLoading: spLoading } = useStabilityPool();
+  const { spDeposit, btcGain, isLoading: spLoading } = useStabilityPool();
   const { hasActiveTrove, isLoading: troveLoading } = useTrove();
   const boostReady = hasActiveTrove && spDeposit > 0n;
   const loaded = !isLoading && !spLoading && !troveLoading;
@@ -109,6 +109,9 @@ export default function Dashboard(): React.JSX.Element {
                 <p className="value">
                   {Number(formatUnits(spDeposit, 18)).toFixed(2)} MUSD
                 </p>
+                <p className="muted">
+                  +{Number(formatUnits(btcGain, 18)).toFixed(4)} BTC earned
+                </p>
                 <Link className="btn" to="/earn">
                   Manage
                 </Link>
@@ -134,6 +137,13 @@ export default function Dashboard(): React.JSX.Element {
             ) : (
               <p className="muted boost-greyed">Boost coming after you earn</p>
             )}
+          </div>
+          <div className="card">
+            <h3>Loop</h3>
+            <p className="muted">Borrow + earn in one click.</p>
+            <Link className="btn" to="/loop">
+              Open
+            </Link>
           </div>
         </section>
         )}
