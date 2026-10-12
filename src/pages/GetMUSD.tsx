@@ -27,7 +27,7 @@ export default function GetMUSD(): React.JSX.Element {
   } = useTrove();
   const { openTrove, isPending, isConfirmed, error } = useOpenTrove();
 
-  const [btcInput, setBtcInput] = useState("0.1");
+  const [btcInput, setBtcInput] = useState("0.049");
   const [musdInput, setMusdInput] = useState("2000");
   const [formError, setFormError] = useState<string | null>(null);
 
@@ -142,7 +142,7 @@ export default function GetMUSD(): React.JSX.Element {
               <input
                 className="input"
                 inputMode="decimal"
-                placeholder="0.1"
+                placeholder="0.049"
                 value={btcInput}
                 onChange={(e) => setBtcInput(e.target.value)}
               />
