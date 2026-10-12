@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { useAccount, useDisconnect } from "wagmi";
+import { formatUnits } from "viem";
 import { useBalances } from "../hooks/useBalances";
+import { useStabilityPool } from "../hooks/useStabilityPool";
 
 function truncateAddress(address: string): string {
   if (address.length < 10) return address;
@@ -11,6 +13,7 @@ export default function Dashboard(): React.JSX.Element {
   const { address, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
   const { btcBalance, musdBalance, isLoading, isError } = useBalances();
+  const { spDeposit, isLoading: spLoading } = useStabilityPool();
 
   if (!isConnected || !address) {
     return (
@@ -77,8 +80,29 @@ export default function Dashboard(): React.JSX.Element {
             </Link>
           </div>
           <div className="card">
-            <h3>Earn</h3>
-            <p className="muted">Coming soon</p>
+            <h3>
+              Earn{" "}
+              {spDeposit > 0n ? <span className="badge">Earning</span> : null}
+            </h3>
+            {spLoading ? (
+              <p className="muted">Loading…</p>
+            ) : spDeposit > 0n ? (
+              <>
+                <p className="value">
+                  {Number(formatUnits(spDeposit, 18)).toFixed(2)} MUSD
+                </p>
+                <Link className="btn" to="/earn">
+                  Manage
+                </Link>
+              </>
+            ) : (
+              <>
+                <p className="muted">Start earning yield.</p>
+                <Link className="btn" to="/earn">
+                  Start earning yield
+                </Link>
+              </>
+            )}
           </div>
           <div className="card">
             <h3>Boost</h3>
