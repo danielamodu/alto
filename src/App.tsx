@@ -9,9 +9,11 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import BottomNav from "./components/BottomNav";
 
 export default function App(): React.JSX.Element {
+  // BASE_URL is "/" locally and "/alto/" on GitHub Pages.
+  const basename = import.meta.env.BASE_URL.replace(/\/$/, "");
   return (
     <ErrorBoundary>
-      <BrowserRouter>
+      <BrowserRouter basename={basename}>
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/dashboard" element={<Dashboard />} />
