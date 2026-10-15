@@ -1,0 +1,14 @@
+packages:
+  - .
+
+onlyBuiltDependencies:
+  - bufferutil
+  - core-js
+  - es5-ext
+  - esbuild
+  - keccak
+  - secp256k1
+  - utf-8-validate
+  - web3
+  - web3-bzz
+  - web3-shh
